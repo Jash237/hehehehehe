@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Us, In Numbers — for Aarya</title>
+<meta name="description" content="17,357 messages, counted for you." />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="ambient" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<main>
+
+  <!-- INTRO LOCK -->
+  <section class="lock" id="lock">
+    <div class="lock-inner">
+      <p class="lock-kicker">a gift, opened only by her</p>
+      <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="Open your gift">
+        <div class="env-body"><div class="env-flap"></div><div class="env-seal">♥</div></div>
+      </div>
+      <h1 class="lock-title"><span>for <em>Aarya</em></span></h1>
+      <p class="lock-hint">tap the envelope</p>
+    </div>
+  </section>
+
+  <div class="story" id="story" aria-hidden="true">
+
+    <!-- HERO -->
+    <header class="hero reveal">
+      <p class="kicker" data-split>the story of us, according to whatsapp</p>
+      <h1 class="display">
+        <span class="line"><span class="count" id="h-total" data-count>0</span></span>
+        <span class="line small">messages. <span id="h-days" class="count" data-count>0</span> days.</span>
+        <span class="line italic">one person worth all of them.</span>
+      </h1>
+      <p class="hero-sub" id="hero-sub"></p>
+      <div class="scroll-cue"><span></span>keep going</div>
+    </header>
+
+    <!-- BIG NUMBERS -->
+    <section class="sect">
+      <div class="grid stats">
+        <article class="card stat reveal"><span class="stat-label">messages sent</span><span class="stat-num" data-count id="s-total"></span></article>
+        <article class="card stat reveal"><span class="stat-label">days we talked</span><span class="stat-num" data-count id="s-days"></span></article>
+        <article class="card stat reveal"><span class="stat-label">average per day</span><span class="stat-num" data-count id="s-avg"></span></article>
+        <article class="card stat reveal"><span class="stat-label">longest streak, no gap</span><span class="stat-num"><span data-count id="s-streak"></span><i>days</i></span></article>
+      </div>
+    </section>
+
+    <!-- WHO TALKS MORE -->
+    <section class="sect">
+      <div class="sect-head reveal">
+        <p class="kicker">chapter 01</p>
+        <h2>who talks more?</h2>
+      </div>
+      <div class="card wide reveal">
+        <div class="vs">
+          <div class="vs-side you"><span class="vs-name">You</span><span class="vs-n" id="v-you"></span></div>
+          <div class="vs-mid">vs</div>
+          <div class="vs-side aarya"><span class="vs-name">Aarya</span><span class="vs-n" id="v-aarya"></span></div>
+        </div>
+        <div class="bar-pair" id="bar-pair" aria-hidden="true"><i class="f-you"></i><i class="f-her"></i></div>
+        <p class="caption" id="vs-note"></p>
+      </div>
+    </section>
+
+    <!-- TOP TEXTS -->
+    <section class="sect">
+      <div class="sect-head reveal">
+        <p class="kicker">chapter 02</p>
+        <h2>your most sent texts</h2>
+        <p class="sub">the hall of fame. exact messages, ranked by how often one of you hit send.</p>
+      </div>
+      <div class="podium" id="podium"></div>
+      <div class="pair-grid">
+        <div class="card reveal"><h3 class="card-h">Yours</h3><ol class="rank" id="rank-you"></ol></div>
+        <div class="card reveal"><h3 class="card-h">Hers</h3><ol class="rank" id="rank-her"></ol></div>
+      </div>
+    </section>
+
+    <!-- EMOJI -->
+    <section class="sect">
+      <div class="sect-head reveal">
+        <p class="kicker">chapter 03</p>
+        <h2>the emoji bench</h2>
+      </div>
+      <div class="card wide reveal">
+        <div class="emoji-hero">
+          <span class="e-big" id="e-top"></span>
+          <div><p class="stat-label">most used emoji</p><p class="e-count"><span data-count id="e-top-n"></span> times</p><p class="caption">crying, but laughing. the whole relationship in one glyph.</p></div>
+        </div>
+        <div class="emoji-row" id="emoji-row"></div>
+      </div>
+    </section>
+
+    <!-- STICKERS -->
+    <section class="sect">
+      <div class="sect-head reveal">
+        <p class="kicker">chapter 04</p>
+        <h2>the sticker economy</h2>
+      </div>
+      <div class="card wide reveal">
+        <div class="sticker-stat">
+          <span class="stat-num" data-count id="stk-total"></span>
+          <p class="stat-label">stickers dropped since July 31</p>
+        </div>
+        <div class="split" id="stk-split"></div>
+        <div class="sticker-days" id="stk-days"></div>
+      </div>
+    </section>
+
+    <!-- WORDS -->
+    <section class="sect">
+      <div class="sect-head reveal">
+        <p class="kicker">chapter 05</p>
+        <h2>two vocabularies, one language</h2>
+        <p class="sub">hindi + english + baby talk. the words each of you leans on most.</p>
+      </div>
+      <div class="pair-grid">
+        <div class="card reveal"><h3 class="card-h">how You talk</h3><div class="cloud" id="cloud-you"></div></div>
+        <div class="card reveal"><h3 class="card-h">how Aarya talks</h3><div class="cloud" id="cloud-her"></div></div>
+      </div>
+    </section>
+
+    <!-- TIMELINE -->
+    <section class="sect">
+      <div class="sect-head reveal">
+        <p class="kicker">chapter 06</p>
+        <h2>every single day</h2>
+        <p class="sub" id="tl-legend">one bar = one day. height = how loud we were. <b>July 31 → October 29, 2026</b></p>
+      </div>
+      <div class="card wide reveal">
+        <div class="chart" id="chart"></div>
+        <div class="chart-axis"><span>Jul 31</span><span>Aug 15</span><span>Sep 1</span><span>Sep 15</span><span>Oct 1</span><span>Oct 29</span></div>
+      </div>
+      <div class="grid three" id="day-cards"></div>
+    </section>
+
+    <!-- CLOCK -->
+    <section class="sect">
+      <div class="sect-head reveal">
+        <p class="kicker">chapter 07</p>
+        <h2>the 2 a.m. club</h2>
+        <p class="sub">when the messages flew. rose is you, gold is her.</p>
+      </div>
+      <div class="card wide reveal clock-card">
+        <svg id="clock" viewBox="0 0 420 420" role="img" aria-label="Messages sent per hour of day"></svg>
+        <div class="clock-side">
+          <p class="peak" id="peak-line"></p>
+          <div class="clock-legend"><span><i class="sw you"></i>You</span><span><i class="sw her"></i>Aarya</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RITUALS -->
+    <section class="sect">
+      <div class="sect-head reveal">
+        <p class="kicker">chapter 08</p>
+        <h2>the small rituals</h2>
+      </div>
+      <div class="grid rituals" id="rituals"></div>
+    </section>
+
+    <!-- LOVE NUMBERS -->
+    <section class="sect">
+      <div class="sect-head reveal">
+        <p class="kicker">chapter 09</p>
+        <h2>in case you missed it</h2>
+      </div>
+      <div class="love-grid" id="love-grid"></div>
+    </section>
+
+    <!-- FINALE -->
+    <section class="sect finale reveal">
+      <p class="kicker">the point of all this</p>
+      <h2 class="finale-h">Happy birthday,<br /><em>Aarya</em></h2>
+      <p class="finale-p" id="finale-p"></p>
+      <button class="wish" id="wish">make a wish 🎂</button>
+      <p class="signoff">— your favourite npc in the chat · October 30, 2026</p>
+    </section>
+
+  </div>
+</main>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
