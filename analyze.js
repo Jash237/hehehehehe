@@ -31,6 +31,31 @@ const times = { You: [], Aarya: [] };
 
 const STOP = new Set(["the","and","not","but","for","you","your","with","that","this","have","has","was","were","are","its","it's","just","like","what","when","where","how","why","who","can","cant","didn","don","does","did","all","too","yes","yeah","yep","mhmm","mm","oh","ok","okay","i'm","i'll","i've","im","ill","ive"]);
 
+// Track message lengths
+const messageLengths = { You: [], Aarya: [] };
+
+// Track laughter/sentiment
+const laughter = { You: 0, Aarya: 0 };
+const laughterPatterns = [
+  /(haha|hahaha|lol|lmao|xd|😂|🤣|😭😭|😭😭😭)/i,
+  /(😂|🤣|😭)/i
+];
+
+// Track nicknames and inside jokes
+const nicknames = { You: {}, Aarya: {} };
+const insideJokes = {};
+const NICKNAMES = [
+  /(darling|babe|bae|bro|baby|love|cutie|gorgjash|gummornin|gudnyt|yar|baby|bhai|dude|man|babe|baby|susu|thang|yaar|yar)/i,
+  /(😘|😍|💖|💕|🥰|😍😍|😘😘)/i
+];
+
+// Track days of the week
+const daysOfWeek = { You: Array(7).fill(0), Aarya: Array(7).fill(0) };
+
+// Track double-texting bursts
+const burstScores = { You: [], Aarya: [] };
+const BURST_THRESHOLD = 3; // 3+ messages in a row
+
 const parseTime = (s) => {
   const m = s.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
   if (!m) return null;
@@ -60,6 +85,24 @@ for (const l of lines) {
 
   // handle quoted reply lines: they appear as "> _Name: text_" then real body on next line
   day.msgs.push({ time, sender, body, minutes: parseTime(time) });
+
+  // Update new metrics
+  messageLengths[sender].push(body.length);
+  daysOfWeek[sender][day.dateObj.getDay()]++;
+
+  if (laughterPatterns.some(p => p.test(body))) {
+    laughter[sender]++;
+  }
+
+  // Nicknames & inside jokes radar
+  NICKNAMES.forEach(pattern => {
+    const matches = body.match(pattern);
+    if (matches) {
+      matches.forEach(m => {
+        nicknames[sender][m.toLowerCase()] = (nicknames[sender][m.toLowerCase()] || 0) + 1;
+      });
+    }
+  });
 
   const mt = body.match(/^(\[.*?\](?:\s*\[.*?\])*)\s*(.*)$/);
   if (mt && mt[1]) {
@@ -241,6 +284,18 @@ const out = {
     topStickerDays,
     replyToHer: replyStats("You", "Aarya"),
     replyToYou: replyStats("Aarya", "You"),
+  },
+  newStats: {
+    messageLengths: {
+      You: Math.round(messageLengths.You.reduce((a, b) => a + b, 0) / (messageLengths.You.length || 1)),
+      Aarya: Math.round(messageLengths.Aarya.reduce((a, b) => a + b, 0) / (messageLengths.Aarya.length || 1))
+    },
+    daysOfWeek,
+    laughter,
+    nicknames: {
+      You: nicknames.You,
+      Aarya: nicknames.Aarya
+    }
   },
   timeline,
   hours,

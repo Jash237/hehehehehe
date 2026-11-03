@@ -6,6 +6,7 @@
 <title>Us, In Numbers — for Aarya</title>
 <meta name="description" content="17,357 messages, counted for you." />
 <link rel="stylesheet" href="styles.css" />
+<script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
 </head>
 <body>
 
@@ -172,6 +173,40 @@
         <h2>in case you missed it</h2>
       </div>
       <div class="love-grid" id="love-grid"></div>
+    </section>
+
+    <!-- NEW CHAPTER: ADVANCED CHAT INSIGHTS -->
+    <section class="sect">
+      <div class="sect-head reveal">
+        <p class="kicker">chapter 10</p>
+        <h2>deep cuts & chatter metrics</h2>
+        <p class="sub">yapping indices, weekday rhythms, laughter meters, and inside jokes.</p>
+      </div>
+      <div class="grid three">
+        <div class="card reveal">
+          <h3 class="card-h">Yapping Index</h3>
+          <span class="stat-num" data-count id="stat-len-you">0</span><span class="stat-label">avg chars per message (You)</span>
+          <span class="stat-num" data-count id="stat-len-her" style="margin-top:1rem; color:var(--gold);">0</span><span class="stat-label">avg chars per message (Aarya)</span>
+          <p class="caption">Who writes longer paragraphs when typing?</p>
+        </div>
+        <div class="card reveal">
+          <h3 class="card-h">Laughter Meter</h3>
+          <span class="stat-num" data-count id="stat-laugh-you">0</span><span class="stat-label">laughs / 😂 (You)</span>
+          <span class="stat-num" data-count id="stat-laugh-her" style="margin-top:1rem; color:var(--gold);">0</span><span class="stat-label">laughs / 😂 (Aarya)</span>
+          <p class="caption">Counting every haha, lol, lmao, and crying emoji.</p>
+        </div>
+        <div class="card reveal">
+          <h3 class="card-h">Nickname Radar</h3>
+          <div id="radar-list" style="display:grid; gap:0.6rem; margin-top:0.8rem; font-family:var(--display); font-size:1rem;"></div>
+          <p class="caption">The sweet names and terms of endearment used most.</p>
+        </div>
+        <div class="card wide reveal">
+          <h3 class="card-h">Weekly Rhythm</h3>
+          <div class="chart" id="week-chart" style="height:200px;"></div>
+          <div class="chart-axis" id="week-axis"></div>
+          <p class="caption">How many messages fly every weekday.</p>
+        </div>
+      </div>
     </section>
 
     <!-- FINALE -->

@@ -1,6 +1,32 @@
 (() => {
 "use strict";
 
+// Initialize Lenis smooth scroll (but keep it stopped until lock opens)
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const lenis = new Lenis({
+  duration: prefersReducedMotion ? 0 : 1.2,
+  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  orientation: "vertical",
+  gestureOrientation: "vertical",
+  smoothWheel: !prefersReducedMotion,
+  touchMultiplier: 2,
+});
+
+// Start Lenis in stopped state to allow the lock overlay to work
+lenis.stop();
+
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
+
+// Listen for reduced motion changes
+window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", (e) => {
+  lenis.options.duration = e.matches ? 0 : 1.2;
+  lenis.options.smoothWheel = !e.matches;
+});
+
 const D = window.CHAT_DATA;
 if (!D) { document.body.innerHTML = "<p style='padding:2rem'>data.js missing — run <code>node analyze.js</code> first.</p>"; return; }
 const M = D.meta, R = D.rituals;
@@ -15,25 +41,36 @@ const lock = $("#lock"), story = $("#story"), env = $("#envelope");
 let opened = false;
 function open() {
   if (opened) return; opened = true;
+  console.log("Lock is opening...");
   env.classList.add("sent");
   setTimeout(() => {
+    console.log("Lock class 'open' applied");
     lock.classList.add("open");
     story.classList.add("live");
     story.removeAttribute("aria-hidden");
     document.body.style.overflow = "";
+    // Start Lenis smooth scroll now that the lock is open
+    lenis.start();
     kick();
     fireHearts(18);
   }, 850);
 }
-env.addEventListener("click", open);
+env.addEventListener("click", (e) => {
+  console.log("Envelope clicked!");
+  open();
+});
 env.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
 document.body.style.overflow = "hidden";
-if (location.hash === "#open") requestAnimationFrame(open); // preview/deep link: skip the envelope
+if (location.hash === "#open") {
+  requestAnimationFrame(() => {
+    open();
+    lenis.start(); // Start immediately for deep link
+  });
+}
 
 /* ---------------- number count-up ---------------- */
-const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 function countUp(el, target, dur = 1600) {
-  if (reduce) { el.textContent = fmt(target); return; }
+  if (prefersReducedMotion) { el.textContent = fmt(target); return; }
   const t0 = performance.now();
   (function tick(now) {
     const p = Math.min(1, (now - t0) / dur);
@@ -53,7 +90,13 @@ $("#hero-sub").textContent =
   `You said "baby" ${youBaby} times. She said it ${herBaby} times back. Counting them took a machine a second. Living them took you three months.`;
 
 /* ---------------- stat cards ---------------- */
-function stat(id, v) { const el = $(id); el.textContent = "0"; el.dataset.target = v; }
+function stat(id, v) {
+  const el = $(id);
+  if (el) {
+    el.textContent = "0";
+    el.dataset.target = v;
+  }
+}
 stat("#s-total", M.total);
 stat("#s-days", M.days);
 stat("#s-avg", M.avgPerDay);
@@ -227,6 +270,49 @@ const love = [
 $("#love-grid").innerHTML = love.map(([v, k]) =>
   `<div class="love reveal"><span class="lv" data-count data-target="${v}">0</span><span class="lk">${k}</span></div>`).join("");
 
+/* ---------------- new stats (chapter 10) ---------------- */
+if (D.newStats) {
+  console.log("New stats data:", D.newStats);
+  stat("#stat-len-you", D.newStats.messageLengths.You);
+  stat("#stat-len-her", D.newStats.messageLengths.Aarya);
+  stat("#stat-laugh-you", D.newStats.laughter.You);
+  stat("#stat-laugh-her", D.newStats.laughter.Aarya);
+
+  const nList = $("#radar-list");
+  if (nList) {
+    const combinedNicknames = [
+      ["baby", (D.newStats.nicknames.You?.baby || 0) + (D.newStats.nicknames.Aarya?.baby || 0)],
+      ["darling", (D.newStats.nicknames.You?.darling || 0) + (D.newStats.nicknames.Aarya?.darling || 0)],
+      ["bae/babe", (D.newStats.nicknames.You?.bae || 0) + (D.newStats.nicknames.Aarya?.babe || 0)],
+      ["bro/yaar", (D.newStats.nicknames.You?.bro || 0) + (D.newStats.nicknames.Aarya?.bro || 0)]
+    ];
+    nList.innerHTML = combinedNicknames.map(([k, v]) =>
+      `<div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:0.3rem;">
+        <span style="color:var(--rose-soft);">${k}</span>
+        <span style="color:var(--cream);">${v}×</span>
+      </div>`
+    ).join("");
+  }
+
+  const weekChart = $("#week-chart");
+  const weekAxis = $("#week-axis");
+  if (weekChart && weekAxis && D.newStats.daysOfWeek) {
+    const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    const youData = D.newStats.daysOfWeek.You;
+    const herData = D.newStats.daysOfWeek.Aarya;
+    const maxVal = Math.max(...youData, ...herData);
+    weekAxis.innerHTML = days.map(d => `<span>${d}</span>`).join("");
+    weekChart.innerHTML = days.map((d, i) => {
+      const youH = ((youData[i] / maxVal) * 100).toFixed(2);
+      const herH = ((herData[i] / maxVal) * 100).toFixed(2);
+      return `<div class="col">
+        <div class="seg you" style="--h:${youH}%"></div>
+        <div class="seg her" style="--h:${herH}%"></div>
+      </div>`;
+    }).join("");
+  }
+}
+
 /* ---------------- finale ---------------- */
 $("#finale-p").textContent =
   `Seventeen thousand three hundred fifty-seven messages. Every "Mhmm" that meant keep talking, every 😭 that wasn't really crying, every sticker she sent instead of admitting she missed you. This is the receipt of three months of choosing each other, daily, in writing. Here's to the next ${fmt(M.total)} — but go easy on the data plan.`;
@@ -254,7 +340,7 @@ function kick() {
 
 /* ---------------- confetti ---------------- */
 const canvas = $("#confetti"), ctx = canvas.getContext("2d");
-let parts = [], raf = null;
+let parts = [], animationRaf = null;
 function sizeCanvas() { canvas.width = innerWidth * devicePixelRatio; canvas.height = innerHeight * devicePixelRatio; ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0); }
 addEventListener("resize", sizeCanvas); sizeCanvas();
 const COLORS = ["#ff6f8f", "#ffa2b6", "#e9b95c", "#ff9a6b", "#a06bff", "#f7ece0"];
@@ -270,13 +356,13 @@ function burst(x, y, n, spread) {
       life: 1, decay: 0.004 + Math.random() * 0.006
     });
   }
-  if (!raf) loop();
+  if (!animationRaf) loop();
 }
 function loop() {
-  raf = requestAnimationFrame(loop);
+  animationRaf = requestAnimationFrame(loop);
   ctx.clearRect(0, 0, innerWidth, innerHeight);
   parts = parts.filter(p => p.life > 0);
-  if (!parts.length) { cancelAnimationFrame(raf); raf = null; return; }
+  if (!parts.length) { cancelAnimationFrame(animationRaf); animationRaf = null; return; }
   for (const p of parts) {
     p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life -= p.decay;
     ctx.save(); ctx.globalAlpha = Math.max(0, Math.min(1, p.life)); ctx.translate(p.x, p.y); ctx.rotate(p.rot);

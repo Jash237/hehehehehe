@@ -121,6 +121,77 @@
       "samples": 3808
     }
   },
+  "newStats": {
+    "messageLengths": {
+      "You": 15,
+      "Aarya": 18
+    },
+    "daysOfWeek": {
+      "You": [
+        1504,
+        1027,
+        1393,
+        785,
+        858,
+        1295,
+        1234
+      ],
+      "Aarya": [
+        2051,
+        1301,
+        1620,
+        868,
+        946,
+        1005,
+        1470
+      ]
+    },
+    "laughter": {
+      "You": 327,
+      "Aarya": 110
+    },
+    "nicknames": {
+      "You": {
+        "gummornin": 48,
+        "bro": 396,
+        "love": 182,
+        "yar": 20,
+        "🥰": 8,
+        "yaar": 84,
+        "darling": 66,
+        "babe": 12,
+        "😍": 64,
+        "😘": 52,
+        "bae": 276,
+        "man": 46,
+        "bhai": 48,
+        "baby": 364,
+        "dude": 22,
+        "cutie": 10
+      },
+      "Aarya": {
+        "babe": 174,
+        "baby": 472,
+        "😍": 118,
+        "yar": 272,
+        "thang": 2,
+        "susu": 10,
+        "man": 166,
+        "gorgjash": 4,
+        "bae": 118,
+        "bro": 428,
+        "love": 336,
+        "😘": 48,
+        "cutie": 52,
+        "bhai": 28,
+        "gummornin": 20,
+        "darling": 12,
+        "yaar": 12,
+        "dude": 22,
+        "🥰": 24
+      }
+    }
+  },
   "timeline": [
     {
       "date": "July 31, 2026",
