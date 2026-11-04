@@ -21,6 +21,18 @@ function raf(time) {
 }
 requestAnimationFrame(raf);
 
+// Interactive cursor glow
+const cursorGlow = document.querySelector('.cursor-glow');
+if (cursorGlow) {
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursorGlow.style.setProperty('--mx', `${mouseX}px`);
+    cursorGlow.style.setProperty('--my', `${mouseY}px`);
+  });
+}
+
 // Listen for reduced motion changes
 window.matchMedia("(prefers-reduced-motion: reduce)").addEventListener("change", (e) => {
   lenis.options.duration = e.matches ? 0 : 1.2;
@@ -292,24 +304,6 @@ if (D.newStats) {
         <span style="color:var(--cream);">${v}×</span>
       </div>`
     ).join("");
-  }
-
-  const weekChart = $("#week-chart");
-  const weekAxis = $("#week-axis");
-  if (weekChart && weekAxis && D.newStats.daysOfWeek) {
-    const days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-    const youData = D.newStats.daysOfWeek.You;
-    const herData = D.newStats.daysOfWeek.Aarya;
-    const maxVal = Math.max(...youData, ...herData);
-    weekAxis.innerHTML = days.map(d => `<span>${d}</span>`).join("");
-    weekChart.innerHTML = days.map((d, i) => {
-      const youH = ((youData[i] / maxVal) * 100).toFixed(2);
-      const herH = ((herData[i] / maxVal) * 100).toFixed(2);
-      return `<div class="col">
-        <div class="seg you" style="--h:${youH}%"></div>
-        <div class="seg her" style="--h:${herH}%"></div>
-      </div>`;
-    }).join("");
   }
 }
 
