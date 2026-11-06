@@ -211,12 +211,12 @@ $("#day-cards").innerHTML = dayCards.map(c =>
     svg.appendChild(mk("line", {
       x1: CX + Math.cos(a) * 186, y1: CY + Math.sin(a) * 186,
       x2: CX + Math.cos(a) * 192, y2: CY + Math.sin(a) * 192,
-      stroke: "#f7ece033", "stroke-width": 1
+      stroke: "#E8C56D33", "stroke-width": 1
     }));
     const lab = mk("text", {
       x: CX + Math.cos(a) * 204, y: CY + Math.sin(a) * 204,
-      fill: "#cbb6b0", "font-size": "9", "text-anchor": "middle", "dominant-baseline": "middle",
-      "font-family": "Outfit, sans-serif", "letter-spacing": "0.08em"
+      fill: "#8A857C", "font-size": "9", "text-anchor": "middle", "dominant-baseline": "middle",
+      "font-family": "Zen Kaku Gothic New, Outfit, sans-serif", "letter-spacing": "0.08em"
     });
     lab.textContent = ((h % 12) || 12) + (h < 12 ? "a" : "p");
     svg.appendChild(lab);
@@ -239,12 +239,12 @@ $("#day-cards").innerHTML = dayCards.map(c =>
       svg.appendChild(p);
     });
   }
-  wedges(D.hours.Aarya, 44, "#e9b95c55");
-  wedges(D.hours.You, 54, "#ff6f8f88");
+  wedges(D.hours.Aarya, 44, "#9C6B1255");
+  wedges(D.hours.You, 54, "#A8322D88");
 
-  const c = mk("text", { x: CX, y: CY - 6, fill: "#f7ece0", "font-size": "13", "text-anchor": "middle", "font-family": "Fraunces, serif", "font-style": "italic" });
+  const c = mk("text", { x: CX, y: CY - 6, fill: "#F7F6F3", "font-size": "13", "text-anchor": "middle", "font-family": "Zen Old Mincho, Fraunces, serif", "font-style": "italic" });
   c.textContent = fmt(M.lateNight);
-  const c2 = mk("text", { x: CX, y: CY + 12, fill: "#cbb6b0", "font-size": "8", "text-anchor": "middle", "letter-spacing": "0.2em", "font-family": "Outfit, sans-serif" });
+  const c2 = mk("text", { x: CX, y: CY + 12, fill: "#8A857C", "font-size": "8", "text-anchor": "middle", "letter-spacing": "0.2em", "font-family": "Zen Kaku Gothic New, Outfit, sans-serif" });
   c2.textContent = "BETWEEN 1–5 AM";
   svg.appendChild(c); svg.appendChild(c2);
 
@@ -300,8 +300,8 @@ if (D.newStats) {
     ];
     nList.innerHTML = combinedNicknames.map(([k, v]) =>
       `<div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--line); padding-bottom:0.3rem;">
-        <span style="color:var(--rose-soft);">${k}</span>
-        <span style="color:var(--cream);">${v}×</span>
+        <span style="color:var(--seal);">${k}</span>
+        <span style="color:var(--ink);">${v}×</span>
       </div>`
     ).join("");
   }
@@ -337,8 +337,8 @@ const canvas = $("#confetti"), ctx = canvas.getContext("2d");
 let parts = [], animationRaf = null;
 function sizeCanvas() { canvas.width = innerWidth * devicePixelRatio; canvas.height = innerHeight * devicePixelRatio; ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0); }
 addEventListener("resize", sizeCanvas); sizeCanvas();
-const COLORS = ["#ff6f8f", "#ffa2b6", "#e9b95c", "#ff9a6b", "#a06bff", "#f7ece0"];
-const HEARTS = ["♥", "❤", "💗", "😍", "🥰"];
+const COLORS = ["#A8322D", "#C44234", "#9C6B12", "#C9943A", "#5B2A19", "#E8C56D"];
+const HEARTS = ["♥", "💛", "🖤", "🎂", "🎎"];
 function burst(x, y, n, spread) {
   for (let i = 0; i < n; i++) {
     const a = Math.random() * Math.PI * 2, v = 2 + Math.random() * spread;
